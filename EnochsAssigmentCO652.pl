@@ -1,81 +1,56 @@
-/*------------------------*/
 /* A Complex Expert System */
-/*------------------------*/
 
-
-
-/*------------------*/
 /* INFERENCE ENGINE */
-/*------------------*/
 
 begin:-	
 
-	initialise,		 		% drive predicate
+	initialise,	
 	collect_joke,
 	rule(Number, Explanation),
-	reply(Number, Reply),			% give expert advice
+	reply(Number, Reply),
 	write('Expert Jokes'),nl,nl,
 	write(Reply),nl,nl,
 	write('Justification of Conclusion'),nl,nl,
 	write('The rule used was number '),
-	write(Number),				% explain to user how 
-	write(': '),				% conclusion was 
-	write(Explanation), nl,			% arrived at
-	retractall(joke(_)).			% Used to clear the database of entries given
-						% by the user, so that it can be run again without
-						% the previous entries.
-
+	write(Number),
+	write(': '),
+	write(Explanation), nl,
+	retractall(joke(_)).
 	
 begin:-
 	write('Sorry cannot help'),nl,nl,
 	retractall(joke(_)).
 
-
-/*----------------*/
 /* USER INTERFACE */
-/*----------------*/
-
 
 /*ASK THE USER QUESTIONS REGARDING THE JOKES THEY WANT TO HEAR*/
 
 initialise:-
 	nl,nl,nl,nl,
-	tab(40),write('******************************************'),nl,
-	tab(40),write('*** JOKES SYSTEM ***'),nl,
-	tab(40),write('******************************************'),nl,nl,
-	write('Please answer the following questions'),
-	write('Each letter is a Type and Topic but that is for you to figure out (part of the joke, hehe)'),
+	write('******************************************'),nl,
+	write('************* JOKES SYSTEM ***************'),nl,
+	write('******************************************'),nl,nl,
+	write('Please answer the following questions'),nl,
+	write('Each letter is a Type and Topic but that is for you to figure out (part of the joke, hehe)'),nl,
 	write('Those jokes where made by ChatGPT 3.5 so if type or topic don\'t match then that is not because of the author'),nl,nl, nl, nl.
 
 collect_joke:-
-	question(Quest,N1,N2,N3,N4,N5),		% output question to user
+	question(Quest,JK1,JK2,JK3,JK4,JK5),
 	write(Quest),nl,
 	getjoke(N),nl,
-	(N='a'),
-	assertz(joke(N1)),	
-	(N='b'),
-	assertz(joke(N2)),
-	(N='c'),
-	assertz(joke(N3)),
-	(N='d'),
-	assertz(joke(N4)),
-	(N='e'),				
-	assertz(joke(N5)),			
-	
+	process_joke(N, JK1, JK2, JK3, JK4, JK5),
 	fail.
 
 collect_joke.
 
-/*--------------------------------------*/
 /* ENSURE USER INPUT IS a, b, c, d or e */
-/*--------------------------------------*/
 
 getjoke(X):-
 	repeat,
 	write('Please answer using a, b, c, d or e:'),nl,
 	read(Z),nl,
 	check(Z),
-	X=Z,!.				% we are not interested here in what the answer is
+	X=Z,!.
 
 check('a').
 check('b').
@@ -83,24 +58,25 @@ check('c').
 check('d').
 check('e').
 
+/* asserts the joke */
 
+process_joke('a', JK, _, _, _, _) :-
+    assert(joke(JK)).
+process_joke('b', _, JK, _, _, _) :-
+    assert(joke(JK)).
+process_joke('c', _, _, JK, _, _) :-
+    assert(joke(JK)).
+process_joke('d', _, _, _, JK, _) :-
+    assert(joke(JK)).
+process_joke('e', _, _, _, _, JK) :-
+    assert(joke(JK)).
 
-/*--------------*/
 /*KNOWLEDGE BASE*/
-/*--------------*/
 
+question('What type of joke would you like?', pun, one_liner, knock_knock, observational, sad).
+question('What topic of joke would you like?', politics, animals, students, teachers, ai).
 
-
-/*Questions*/
-
-question('What type of joke would you like?',pun,one_liner,knock_knock,observational,sad).
-question('What topic of joke would you like?',politics,animals,students,teacher,ai).
-
-
-/*------------------------------*/
 /* DIAGNOSTIC IF --> THEN RULES */
-/*------------------------------*/
-
 
 rule(1,'this is a pun about politics'):-
 	joke(pun),joke(politics).
@@ -116,7 +92,6 @@ rule(4,'this is a pun about teachers'):-
 	
 rule(5,'this is a pun about AI'):-
 	joke(pun),joke(ai).
-	
 
 rule(6,'this is a one-liner about politics'):-
 	joke(one_liner),joke(politics).
@@ -133,7 +108,6 @@ rule(9,'this is a one-liner about teachers'):-
 rule(10,'this is a one-liner about AI'):-
 	joke(one_liner),joke(ai).
 	
-
 rule(11,'this is a knock-knock joke about politics'):-
 	joke(knock_knock),joke(politics).
 	
@@ -179,10 +153,7 @@ rule(24,'this is a sad joke about teachers'):-
 rule(25,'this is a sad joke about AI'):-
 	joke(sad),joke(ai).
 
-/*------*/
 /* Joke */
-/*------*/
-
 
 reply(1,'Why did the politician bring a ladder to the debate? Because he wanted to take his campaign to the next level!').
 reply(2,'Why did the squirrel join a gym? To get a better nut-tural body!').
@@ -214,6 +185,4 @@ reply(23,'Why did the student bring a mirror to school? Because he wanted to ref
 reply(24,'Why did the teacher go to therapy? Because they had too many "students-who-didn\'t-do-their-homework" issues!').
 reply(25,'Why did the AI refuse therapy? It was convinced that its emotional baggage was just a byte too heavy to unload.').
 
-/*-------------------------*/
 /*END OF JOKE EXPERT SYSTEM*/
-/*-------------------------*/
