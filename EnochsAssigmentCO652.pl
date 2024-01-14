@@ -37,7 +37,7 @@ initialise:-
 collect_joke:-
 	question(Quest,JK1,JK2,JK3,JK4,JK5),
 	write(Quest),nl,
-	getjoke(N),nl,
+	get_re(N),nl,
 	process_joke(N, JK1, JK2, JK3, JK4, JK5),
 	fail.
 
@@ -45,7 +45,7 @@ collect_joke.
 
 /* ENSURE USER INPUT IS a, b, c, d or e */
 
-getjoke(X):-
+get_re(X):-
 	repeat,
 	write('Please answer using a, b, c, d or e:'),nl,
 	read(Z),nl,
