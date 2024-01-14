@@ -31,23 +31,32 @@ initialise:-
 	write('************* JOKES SYSTEM ***************'),nl,
 	write('******************************************'),nl,nl,
 	write('Please answer the following questions'),nl,
-	write('Each letter is a Type and Topic but that is for you to figure out (part of the joke, hehe)'),nl,
 	write('Those jokes where made by ChatGPT 3.5 so if type or topic don\'t match then that is not because of the author'),nl,nl, nl, nl.
 
 collect_joke:-
 	question(Quest,JK1,JK2,JK3,JK4,JK5),
 	write(Quest),nl,
-	get_re(N),nl,
-	process_joke(N, JK1, JK2, JK3, JK4, JK5),
+	get_re(X, JK1, JK2, JK3, JK4, JK5),nl,
+	process_joke(X, JK1, JK2, JK3, JK4, JK5),
 	fail.
 
 collect_joke.
 
 /* ENSURE USER INPUT IS a, b, c, d or e */
 
-get_re(X):-
+get_re(X, JK1, JK2, JK3, JK4, JK5):-
 	repeat,
-	write('Please answer using a, b, c, d or e:'),nl,
+	write('Please answer using a ('),
+	write(JK1),
+	write('), b ('),
+	write(JK2),
+	write('), c ('),
+	write(JK3),
+	write('), d ('),
+	write(JK4),
+	write(') or e ('),
+	write(JK5),
+	write('):'),nl,
 	read(Z),nl,
 	check(Z),
 	X=Z,!.
